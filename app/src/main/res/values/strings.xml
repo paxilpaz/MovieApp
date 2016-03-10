@@ -3,13 +3,6 @@
     <string name="action_settings">Settings</string>
 
 
-
-
-
-
-
-
-
     <!-- PREFERENCES -->
     <string name="preference_sorting_key">sorting_key</string>
     <string name="preference_sorting_default">Popularity</string>
@@ -22,4 +15,10 @@
         <item>Popularity</item>
         <item>Rating</item>
     </string-array>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
 </resources>

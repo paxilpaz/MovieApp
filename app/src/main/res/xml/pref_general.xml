@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <ListPreference
         android:key="@string/preference_sorting_key"
         android:icon="@drawable/ic_swap_vert_24dp"
@@ -7,4 +7,5 @@
         android:title="@string/preference_sorting_title"
         android:entries="@array/preference_sorting_entries"
         android:entryValues="@array/preference_sorting_entry_values" />
+
 </PreferenceScreen>
