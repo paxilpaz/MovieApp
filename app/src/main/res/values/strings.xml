@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">MovieApp</string>
     <string name="action_settings">Settings</string>
+
+
+
+
+
+
+
+
+
+    <!-- PREFERENCES -->
+    <string name="preference_sorting_key">sorting_key</string>
+    <string name="preference_sorting_default">Popularity</string>
+    <string name="preference_sorting_title">Sort by</string>
+    <string-array name="preference_sorting_entries">
+        <item>Popularity</item>
+        <item>Rating</item>
+    </string-array>
+    <string-array name="preference_sorting_entry_values">
+        <item>Popularity</item>
+        <item>Rating</item>
+    </string-array>
 </resources>
