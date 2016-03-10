@@ -1,5 +1,6 @@
 package com.example.paxilpaz.movieapp;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,11 @@ import android.widget.GridView;
 
 import com.example.paxilpaz.movieapp.movie.Movie;
 import com.example.paxilpaz.movieapp.movie.MovieArrayAdapter;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -30,9 +36,7 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        movieArrayAdapter = new MovieArrayAdapter(getActivity().getApplicationContext(),
-                R.layout.my_image_view,
-                new Movie[] { });
+
         updateMovies();
     }
 
@@ -49,6 +53,11 @@ public class SummaryFragment extends Fragment {
         Log.d(LOG_CAT,"Creating view");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridView = (GridView)rootView.findViewById(R.id.gridView);
+
+        movieArrayAdapter = new MovieArrayAdapter(getActivity().getApplicationContext(),
+                R.layout.my_image_view,
+                new Movie[] { });
+
         gridView.setAdapter(movieArrayAdapter);
         Log.d(LOG_CAT,"View created");
         return rootView;
@@ -59,6 +68,41 @@ public class SummaryFragment extends Fragment {
         @Override
         protected Movie[] doInBackground(Void... params) {
             Log.d(LOG_CAT,"Fetching movies");
+
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String resultFromFetch = null;
+
+            try {
+
+                //TODO add strings to build URI
+
+                Uri uri = new Uri.Builder().build();
+                URL url = new URL(uri.toString());
+
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                //TODO handle reading retrieved stuff
+
+            } catch(IOException e) {
+                Log.e(LOG_CAT, "Error ", e);
+                return null;
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(LOG_CAT, "Error closing reader ", e);
+                    }
+                }
+            }
+
+
+
             return new Movie[0];
         }
 
