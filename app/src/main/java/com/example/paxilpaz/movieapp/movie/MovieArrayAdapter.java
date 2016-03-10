@@ -3,6 +3,7 @@ package com.example.paxilpaz.movieapp.movie;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     private Context context;
     private int resourceLayout;
     private Movie movies[];
+
+    private static final String LOG_CAT = MovieArrayAdapter.class.getSimpleName();
 
     private static final String SCHEME = "http";
     private static final String AUTHORITY = "image.tmdb.org";
@@ -40,12 +43,14 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         MovieHolder holder;
 
         if (row ==null) {
+            Log.d(LOG_CAT,"Row did not exist");
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(resourceLayout, parent, false);
             holder = new MovieHolder();
             holder.img = (ImageView)row.findViewById(R.id.image_view_thumbnail);
             row.setTag(holder);
         } else {
+            Log.d(LOG_CAT,"Recycling row");
             holder = (MovieHolder)row.getTag();
         }
 
@@ -57,9 +62,14 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                 .appendPath(DIM)
                 .appendPath(movie.getBackdrop_path())
                 .build();
+        Log.d(LOG_CAT,"URI is \t" + uri.toString());
         Picasso.with(context).load(uri).into(holder.img);
-
+        Log.d(LOG_CAT, "image created");
         return row;
+    }
+
+    public void setMovies(Movie[] movies) {
+        this.movies = movies;
     }
 
     private static class MovieHolder {
