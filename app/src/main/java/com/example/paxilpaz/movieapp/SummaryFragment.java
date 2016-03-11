@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.example.paxilpaz.movieapp.movie.Movie;
-import com.example.paxilpaz.movieapp.movie.MovieArrayAdapter;
+import com.example.paxilpaz.movieapp.movie.MovieArrayAdapterBase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,7 +35,8 @@ public class SummaryFragment extends Fragment {
 
     private static final String LOG_CAT = SummaryFragment.class.getSimpleName();
 
-    private MovieArrayAdapter movieArrayAdapter;
+    //private MovieArrayAdapter movieArrayAdapter;
+    private MovieArrayAdapterBase movieArrayAdapter;
 
 
     public SummaryFragment() {
@@ -58,8 +60,11 @@ public class SummaryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridView = (GridView)rootView.findViewById(R.id.gridView);
 
-        movieArrayAdapter = new MovieArrayAdapter(getActivity().getApplicationContext(),
+        /*movieArrayAdapter = new MovieArrayAdapter(getActivity(),
                 R.layout.my_image_view,
+                new ArrayList<Movie>());*/
+
+        movieArrayAdapter = new MovieArrayAdapterBase(getActivity(),
                 new ArrayList<Movie>());
 
         gridView.setAdapter(movieArrayAdapter);
@@ -189,9 +194,8 @@ public class SummaryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movies) {
             if (movies != null) {
-                movieArrayAdapter.clear();
+                movieArrayAdapter.setMovies(Arrays.asList(movies));
             }
-            movieArrayAdapter.addAll(movies);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.paxilpaz.movieapp.movie;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     private Context context;
+    private List<Movie> movies;
 
     private static final String LOG_CAT = MovieArrayAdapter.class.getSimpleName();
 
@@ -31,6 +33,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     public MovieArrayAdapter(Context context, int resourceLayout, List<Movie> movies) {
         super(context,resourceLayout,movies);
         this.context = context;
+        this.movies = movies;
 
     }
 
@@ -38,9 +41,10 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     public View getView(int position, View viewLayout, ViewGroup parent) {
         MovieHolder holder = null;
         Movie movieItem = getItem(position);
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (viewLayout ==null) {
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+
             viewLayout = inflater.inflate(R.layout.my_image_view, null);
             holder = new MovieHolder();
             holder.img = (ImageView)viewLayout.findViewById(R.id.image_view_thumbnail);
@@ -56,8 +60,13 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                     .appendPath(DIM)
                     .appendEncodedPath(movieItem.getBackdrop_path())
                     .build();
-            Picasso.with(context).load(uri.toString()).into(holder.img);
+        Picasso.with(context).load(uri.toString()).into(holder.img);
         return viewLayout;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
     }
 
     private class MovieHolder {
