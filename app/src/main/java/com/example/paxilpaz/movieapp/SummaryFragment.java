@@ -35,9 +35,7 @@ public class SummaryFragment extends Fragment {
 
     private static final String LOG_CAT = SummaryFragment.class.getSimpleName();
 
-    //private MovieArrayAdapter movieArrayAdapter;
     private MovieArrayAdapterBase movieArrayAdapter;
-
 
     public SummaryFragment() {
 
@@ -59,10 +57,6 @@ public class SummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridView = (GridView)rootView.findViewById(R.id.gridView);
-
-        /*movieArrayAdapter = new MovieArrayAdapter(getActivity(),
-                R.layout.my_image_view,
-                new ArrayList<Movie>());*/
 
         movieArrayAdapter = new MovieArrayAdapterBase(getActivity(),
                 new ArrayList<Movie>());
@@ -174,7 +168,6 @@ public class SummaryFragment extends Fragment {
                 String backdropPath = movieToParse.getString(BACKDROP_PATH);
                 double voteAverage = movieToParse.getDouble(VOTE_AVERAGE);
                 int voteCount = movieToParse.getInt(VOTE_COUNT);
-
 
                 arrayOfMovies[i] = new Movie(title,
                                             originalTitle,
