@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.example.paxilpaz.movieapp.movie.Movie;
-import com.example.paxilpaz.movieapp.movie.MovieArrayAdapterBase;
+import com.example.paxilpaz.movieapp.movie.MovieArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -34,10 +33,7 @@ import java.util.Arrays;
 public class SummaryFragment extends Fragment {
 
     private static final String LOG_CAT = SummaryFragment.class.getSimpleName();
-
-    //private MovieArrayAdapter movieArrayAdapter;
-    private MovieArrayAdapterBase movieArrayAdapter;
-
+    private GridView gridView;
 
     public SummaryFragment() {
 
@@ -46,7 +42,7 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateMovies();
+
     }
 
     private void updateMovies() {
@@ -58,16 +54,8 @@ public class SummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        GridView gridView = (GridView)rootView.findViewById(R.id.gridView);
-
-        /*movieArrayAdapter = new MovieArrayAdapter(getActivity(),
-                R.layout.my_image_view,
-                new ArrayList<Movie>());*/
-
-        movieArrayAdapter = new MovieArrayAdapterBase(getActivity(),
-                new ArrayList<Movie>());
-
-        gridView.setAdapter(movieArrayAdapter);
+        gridView = (GridView)rootView.findViewById(R.id.gridView);
+        updateMovies();
         return rootView;
     }
 
@@ -75,9 +63,13 @@ public class SummaryFragment extends Fragment {
 
         private static final String SCHEME = "http";
         private static final String AUTHORITY = "api.themoviedb.org";
+        private static final String AUTHORITY_IMAGE = "image.tmdb.org";
         private static final String VERSION = "3";
         private static final String MOVIE = "movie";
         private static final String API_KEY = "api_key";
+        private static final String T = "t";
+        private static final String P = "p";
+        private static final String DIM = "w500";
 
         @Override
         protected Movie[] doInBackground(Void... params) {
@@ -165,17 +157,33 @@ public class SummaryFragment extends Fragment {
             for (int i = 0; i < arrayOfMovies.length; ++i) {
                 JSONObject movieToParse = results.getJSONObject(i);
 
-                String posterPath = movieToParse.getString(POSTER_PATH);
+
                 String overview = movieToParse.getString(OVERVIEW);
                 int id = movieToParse.getInt(ID);
                 String originalTitle = movieToParse.getString(ORIGINAL_TITLE);
                 String originalLanguage = movieToParse.getString(ORIGINAL_LANGUAGE);
                 String title = movieToParse.getString(TITLE);
-                String backdropPath = movieToParse.getString(BACKDROP_PATH);
+
                 double voteAverage = movieToParse.getDouble(VOTE_AVERAGE);
                 int voteCount = movieToParse.getInt(VOTE_COUNT);
 
+                Uri uriBackdrop = new Uri.Builder().scheme(SCHEME)
+                        .authority(AUTHORITY_IMAGE)
+                        .appendPath(T)
+                        .appendPath(P)
+                        .appendPath(DIM)
+                        .appendEncodedPath(movieToParse.getString(BACKDROP_PATH))
+                        .build();
+                String backdropPath = uriBackdrop.toString();
 
+                Uri uriPoster = new Uri.Builder().scheme(SCHEME)
+                        .authority(AUTHORITY_IMAGE)
+                        .appendPath(T)
+                        .appendPath(P)
+                        .appendPath(DIM)
+                        .appendEncodedPath(movieToParse.getString(POSTER_PATH))
+                        .build();
+                String posterPath = uriPoster.toString();
                 arrayOfMovies[i] = new Movie(title,
                                             originalTitle,
                                             originalLanguage,
@@ -194,7 +202,10 @@ public class SummaryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movies) {
             if (movies != null) {
-                movieArrayAdapter.setMovies(Arrays.asList(movies));
+                MovieArrayAdapter movieArrayAdapter = new MovieArrayAdapter(getActivity(),
+                        Arrays.asList(movies));
+
+                gridView.setAdapter(movieArrayAdapter);
             }
         }
     }

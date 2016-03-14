@@ -1,8 +1,7 @@
 package com.example.paxilpaz.movieapp.movie;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,56 +19,27 @@ import java.util.List;
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     private Context context;
-    private List<Movie> movies;
 
     private static final String LOG_CAT = MovieArrayAdapter.class.getSimpleName();
 
-    private static final String SCHEME = "http";
-    private static final String AUTHORITY = "image.tmdb.org";
-    private static final String T = "t";
-    private static final String P = "p";
-    private static final String DIM = "w500";
-
-    public MovieArrayAdapter(Context context, int resourceLayout, List<Movie> movies) {
-        super(context,resourceLayout,movies);
+    public MovieArrayAdapter(Context context,  List<Movie> movies) {
+        super(context,0,movies);
         this.context = context;
-        this.movies = movies;
-
     }
 
     @Override
     public View getView(int position, View viewLayout, ViewGroup parent) {
-        MovieHolder holder = null;
         Movie movieItem = getItem(position);
 
-        if (viewLayout ==null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-
-            viewLayout = inflater.inflate(R.layout.my_image_view, null);
-            holder = new MovieHolder();
-            holder.img = (ImageView)viewLayout.findViewById(R.id.image_view_thumbnail);
-            viewLayout.setTag(holder);
+        if (viewLayout == null) {
+            viewLayout = LayoutInflater.from(context).inflate(R.layout.my_image_view, parent, false);
+            Log.d(LOG_CAT, "View not existent. Creating it...");
         } else {
-            holder = (MovieHolder)viewLayout.getTag();
+            Log.d(LOG_CAT, "Recycling view...");
         }
 
-        Uri uri = new Uri.Builder().scheme(SCHEME)
-                    .authority(AUTHORITY)
-                    .appendPath(T)
-                    .appendPath(P)
-                    .appendPath(DIM)
-                    .appendEncodedPath(movieItem.getBackdrop_path())
-                    .build();
-        Picasso.with(context).load(uri.toString()).into(holder.img);
+        Picasso.with(context).load(movieItem.getBackdrop_path()).into((ImageView)viewLayout);
+
         return viewLayout;
-    }
-
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-        notifyDataSetChanged();
-    }
-
-    private class MovieHolder {
-        ImageView img;
     }
 }
