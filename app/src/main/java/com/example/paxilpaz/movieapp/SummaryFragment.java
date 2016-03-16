@@ -36,26 +36,31 @@ public class SummaryFragment extends Fragment {
     private GridView gridView;
 
     public SummaryFragment() {
-
+        Log.d(LOG_CAT, "Constructor");
     }
 
     @Override
     public void onStart() {
+        Log.d(LOG_CAT, "onStart initiated");
         super.onStart();
-
+        updateMovies();
+        Log.d(LOG_CAT, "onStart finished");
     }
 
     private void updateMovies() {
+        Log.d(LOG_CAT, "UpdateMovies initiated");
         FetchMovieTask fetchMovieTask = new FetchMovieTask();
         fetchMovieTask.execute();
+        Log.d(LOG_CAT, "UpdateMovies performed");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_CAT, "onCreateView initiated");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         gridView = (GridView)rootView.findViewById(R.id.gridView);
-        updateMovies();
+        Log.d(LOG_CAT, "onCreateView performed");
         return rootView;
     }
 
@@ -117,6 +122,7 @@ public class SummaryFragment extends Fragment {
                 }
                 resultFromFetch = sb.toString();
             } catch(IOException e) {
+                Log.e(LOG_CAT, "IO exception", e);
                 return null;
             } finally {
                 if (urlConnection != null)
@@ -125,6 +131,7 @@ public class SummaryFragment extends Fragment {
                     try {
                         reader.close();
                     } catch (final IOException e) {
+                        Log.e(LOG_CAT, "reader close exception", e);
                     }
                 }
             }
@@ -193,7 +200,8 @@ public class SummaryFragment extends Fragment {
                                             id,
                                             voteCount,
                                             voteAverage);
-
+                Log.d(LOG_CAT, "Successfully parsed movie " + (i+1) + " of " + arrayOfMovies.length);
+                Log.d(LOG_CAT, (i+1) + " backdrop: " + arrayOfMovies[i].getBackdrop_path());
             }
 
             return arrayOfMovies;

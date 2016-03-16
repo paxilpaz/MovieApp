@@ -5,7 +5,7 @@
 
     <!-- PREFERENCES -->
     <string name="preference_sorting_key" translatable="false">sorting_key</string>
-    <string name="preference_sorting_default" translatable="false">Popularity</string>
+    <string name="preference_sorting_default" translatable="false">popular</string>
     <string name="preference_sorting_title" translatable="false">Sort by</string>
     <string-array name="preference_sorting_entries">
         <item>Popularity</item>
