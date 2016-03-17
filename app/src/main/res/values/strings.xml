@@ -20,5 +20,6 @@
 
     <!-- Example General settings -->
     <string name="pref_header_general" translatable="false">General</string>
+    <string name="title_activity_movie_detail">MovieDetail</string>
 
 </resources>
