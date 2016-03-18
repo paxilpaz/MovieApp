@@ -34,34 +34,37 @@ public class SummaryFragment extends Fragment {
 
     private static final String LOG_CAT = SummaryFragment.class.getSimpleName();
     private GridView gridView;
+    private String dimension;
 
     public SummaryFragment() {
-        Log.d(LOG_CAT, "Constructor");
+
     }
 
     @Override
     public void onStart() {
-        Log.d(LOG_CAT, "onStart initiated");
         super.onStart();
         updateMovies();
-        Log.d(LOG_CAT, "onStart finished");
     }
 
     private void updateMovies() {
-        Log.d(LOG_CAT, "UpdateMovies initiated");
         FetchMovieTask fetchMovieTask = new FetchMovieTask();
         fetchMovieTask.execute();
-        Log.d(LOG_CAT, "UpdateMovies performed");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG_CAT, "onCreateView initiated");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         gridView = (GridView)rootView.findViewById(R.id.gridView);
-        Log.d(LOG_CAT, "onCreateView performed");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        dimension = sharedPreferences.getString(getString(R.string.preference_preview_width),
+                getString(R.string.preference_preview_width_default));
+        gridView.setColumnWidth(convertDimension());
         return rootView;
+    }
+
+    private int convertDimension() {
+        return Integer.parseInt(dimension.substring(1));
     }
 
     private class FetchMovieTask extends AsyncTask<Void, Void, Movie[]> {
@@ -74,7 +77,6 @@ public class SummaryFragment extends Fragment {
         private static final String API_KEY = "api_key";
         private static final String T = "t";
         private static final String P = "p";
-        private static final String DIM = "w500";
 
         @Override
         protected Movie[] doInBackground(Void... params) {
@@ -178,7 +180,7 @@ public class SummaryFragment extends Fragment {
                         .authority(AUTHORITY_IMAGE)
                         .appendPath(T)
                         .appendPath(P)
-                        .appendPath(DIM)
+                        .appendPath(dimension)
                         .appendEncodedPath(movieToParse.getString(BACKDROP_PATH))
                         .build();
                 String backdropPath = uriBackdrop.toString();
@@ -187,7 +189,7 @@ public class SummaryFragment extends Fragment {
                         .authority(AUTHORITY_IMAGE)
                         .appendPath(T)
                         .appendPath(P)
-                        .appendPath(DIM)
+                        .appendPath(dimension)
                         .appendEncodedPath(movieToParse.getString(POSTER_PATH))
                         .build();
                 String posterPath = uriPoster.toString();
@@ -200,8 +202,6 @@ public class SummaryFragment extends Fragment {
                                             id,
                                             voteCount,
                                             voteAverage);
-                Log.d(LOG_CAT, "Successfully parsed movie " + (i+1) + " of " + arrayOfMovies.length);
-                Log.d(LOG_CAT, (i+1) + " backdrop: " + arrayOfMovies[i].getBackdrop_path());
             }
 
             return arrayOfMovies;

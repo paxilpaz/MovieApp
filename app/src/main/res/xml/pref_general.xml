@@ -8,4 +8,12 @@
         android:entries="@array/preference_sorting_entries"
         android:entryValues="@array/preference_sorting_entry_values" />
 
+    <ListPreference
+        android:key="@string/preference_preview_width"
+        android:icon="@drawable/ic_crop_24dp"
+        android:defaultValue="@string/preference_preview_width_default"
+        android:title="@string/preference_preview_width_title"
+        android:entries="@array/preference_preview_width_entries"
+        android:entryValues="@array/preference_preview_width_entry_values"/>
+
 </PreferenceScreen>

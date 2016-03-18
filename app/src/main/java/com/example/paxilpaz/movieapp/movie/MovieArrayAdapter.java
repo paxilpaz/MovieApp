@@ -1,12 +1,12 @@
 package com.example.paxilpaz.movieapp.movie;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.paxilpaz.movieapp.R;
 import com.squareup.picasso.Picasso;
@@ -33,12 +33,11 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
         if (viewLayout == null) {
             viewLayout = LayoutInflater.from(context).inflate(R.layout.my_image_view, parent, false);
-            Log.d(LOG_CAT, "View not existent. Creating it...");
-        } else {
-            Log.d(LOG_CAT, "Recycling view...");
         }
 
-        Picasso.with(context).load(movieItem.getBackdrop_path()).into((ImageView)viewLayout);
+        Picasso.with(context).load(movieItem.getBackdrop_path()).into((ImageView) viewLayout.findViewById(R.id.image_view_thumbnail));
+        TextView tv = (TextView)viewLayout.findViewById(R.id.image_view_text);
+        tv.setText(movieItem.getTitle());
 
         return viewLayout;
     }
