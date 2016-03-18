@@ -19,12 +19,18 @@ import java.util.List;
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     private Context context;
+    private List<Movie> movies;
 
     private static final String LOG_CAT = MovieArrayAdapter.class.getSimpleName();
 
     public MovieArrayAdapter(Context context,  List<Movie> movies) {
         super(context,0,movies);
         this.context = context;
+        this.movies = movies;
+    }
+
+    public Movie getMovie(int position) {
+        return movies.get(position);
     }
 
     @Override

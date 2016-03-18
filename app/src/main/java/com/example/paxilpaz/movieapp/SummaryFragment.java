@@ -1,5 +1,6 @@
 package com.example.paxilpaz.movieapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.paxilpaz.movieapp.movie.Movie;
@@ -35,6 +37,7 @@ public class SummaryFragment extends Fragment {
     private static final String LOG_CAT = SummaryFragment.class.getSimpleName();
     private GridView gridView;
     private String dimension;
+    private MovieArrayAdapter movieAdapter;
 
     public SummaryFragment() {
 
@@ -60,6 +63,15 @@ public class SummaryFragment extends Fragment {
         dimension = sharedPreferences.getString(getString(R.string.preference_preview_width),
                 getString(R.string.preference_preview_width_default));
         gridView.setColumnWidth(convertDimension());
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG_CAT, "Clicked " + position);
+                Intent intent = new Intent(getContext(), MovieDetail.class);
+                intent.putExtra("myMovie",movieAdapter.getMovie(position));
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
@@ -210,10 +222,10 @@ public class SummaryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movies) {
             if (movies != null) {
-                MovieArrayAdapter movieArrayAdapter = new MovieArrayAdapter(getActivity(),
+                movieAdapter = new MovieArrayAdapter(getActivity(),
                         Arrays.asList(movies));
 
-                gridView.setAdapter(movieArrayAdapter);
+                gridView.setAdapter(movieAdapter);
             }
         }
     }
