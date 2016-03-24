@@ -68,7 +68,7 @@ public class SummaryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(LOG_CAT, "Clicked " + position);
                 Intent intent = new Intent(getContext(), MovieDetail.class);
-                intent.putExtra("myMovie",movieAdapter.getMovie(position));
+                intent.putExtra("myMovie", movieAdapter.getMovie(position));
                 startActivity(intent);
             }
         });

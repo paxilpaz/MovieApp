@@ -115,4 +115,8 @@ public class Movie implements Parcelable {
         title = in.readString();
     }
 
+    public String toString() {
+        return "Title: " + title + " Rating: " + vote_average;
+    }
+
 }
